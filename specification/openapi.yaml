@@ -1,0 +1,278 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Swagger volcano campsite
+  license:
+    name: MIT
+servers:
+  - url: 'http://volcano.swagger.io/api'
+paths:
+  /campsite:
+    parameters:
+      - $ref: '#/components/parameters/requestId'
+      - $ref: '#/components/parameters/applicationId'
+    get:
+      summary: List all campsites
+      operationId: listCampsite
+      tags:
+        - campsites
+      security:
+        - campsite_auth:
+            - 'read:campsite'
+      parameters:
+        - name: startDate
+          in: query
+          description: start data search critiria
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          description: end data search critiria
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: An paged array of pets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailableDates'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Error'
+    post:
+      summary: Create resevation for campsite
+      operationId: createOrder
+      requestBody:
+        description: Book to add to the store
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reservation'
+      tags:
+        - campsites
+      security:
+        - campsite_auth:
+            - 'read:campsite'
+            - 'write:campsite'
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Error'
+  /campsite/{orderId}:
+    put:
+      summary: update campsite order
+      operationId: updateCampsiteOrder
+      tags:
+        - campsites
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: The id of the pet to retrieve
+          schema:
+            type: string
+      requestBody:
+        description: Book to add to the store
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reservation'
+      security:
+        - campsite_auth:
+            - 'read:campsite'
+            - 'write:campsite'
+      responses:
+        '200':
+          description: An paged array of pets
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Error'
+    delete:
+      summary: delete a campsite oder
+      operationId: deleteOrder
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: The id of the resevation for the campsite
+          schema:
+            type: string
+      tags:
+        - campsites
+      security:
+        - campsite_auth:
+            - 'read:campsite'
+            - 'write:campsite'
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Error'
+    get:
+      summary: get a campsite oder
+      operationId: getOrder
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: The id of the resevation for the campsite
+          schema:
+            type: string
+      tags:
+        - campsites
+      security:
+        - campsite_auth:
+            - 'read:campsite'
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Error'
+components:
+  parameters:
+    requestId:
+      name: requestId
+      in: header
+      description: partner generated unique id for each request used for message tracking purposes
+      required: true
+      schema:
+        type: string
+        minimum: 1
+        maximum: 64
+    applicationId:
+      name: applicationId
+      in: header
+      description: user application unique identifier
+      required: false
+      schema:
+        type: string
+        minimum: 1
+        maximum: 64
+  securitySchemes:
+    campsite_auth:
+      type: oauth2
+      description: This API uses OAuth 2 with the client credential grant flow.
+      flows:
+        clientCredentials:
+          tokenUrl: 'https://localhost:6882/token'
+          scopes:
+            'write:campsite': modify campsite for reservation
+            'read:campsite': get campsite
+  schemas:
+    Client:
+      type: object
+      required:
+        - email
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+    Reservation:
+      type: object
+      required:
+        - departure
+        - arrival
+      properties:
+        id:
+          type: string
+        client:
+          $ref: '#/components/schemas/Client'
+        arrival:
+          type: string
+          format: date
+          description: Arrival date
+          example: "2021-01-30"
+        departure:
+          type: string
+          format: date
+          description: Leaving date
+          example: "2021-01-30"
+    AvailableDates:
+      type: object
+      properties:
+        datelist:
+          type: array
+          items:
+            type: string
+            format: date
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        comment:
+          type: string
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string

@@ -1,0 +1,31 @@
+{
+  "name": "volcano-campsite",
+  "version": "1.00",
+  "groupId": "com.mservicetech.api",
+  "artifactId": "volcano-campsite-api",
+  "rootPackage": "com.mservicetech.campsite",
+  "handlerPackage":"com.mservicetech.campsite.handler",
+  "modelPackage":"com.mservicetech.campsite.model",
+  "overwriteHandler": false,
+  "overwriteHandlerTest": false,
+  "overwriteModel": false,
+  "httpPort": 8080,
+  "enableHttp": true,
+  "httpsPort": 8443,
+  "enableHttps": true,
+  "enableRegistry": false,
+  "specChangeCodeReGenOnly": true,
+  "generateValuesYml": true,
+  "skipPomFile": true,
+  "supportDb": false,
+  "generateValuesYml": true,
+  "generateEnvVars": {
+    "generate": true,
+    "skipArray": true,
+    "skipMap": true,
+    "exclude": [
+      "handler.yml",
+      "values.yml"
+    ]
+  }
+}

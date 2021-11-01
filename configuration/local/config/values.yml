@@ -1,0 +1,18 @@
+#--------------------------------------------------------------------------------
+# service.yml
+#--------------------------------------------------------------------------------
+service.singletons:
+  - com.networknt.utility.Decryptor:
+      - com.networknt.decrypt.AESDecryptor
+  - com.networknt.balance.LoadBalance:
+      - com.networknt.balance.RoundRobinLoadBalance
+  - com.networknt.cluster.Cluster:
+      - com.networknt.cluster.LightCluster
+
+server.enableHttp: false
+server.enableHttps: true
+server.httpPort: 8080
+server.httpPorts: 8443
+server.enableRegistry: true
+
+portalRegistry.portalUrl: https://localhost:8438
