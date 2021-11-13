@@ -211,6 +211,11 @@
             <version>${version.light-4j}</version>
         </dependency>
         <dependency>
+            <groupId>com.networknt</groupId>
+            <artifactId>data-source</artifactId>
+            <version>${version.light-4j}</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${version.jackson}</version>
@@ -272,7 +277,7 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${version.h2}</version>
-            <scope>test</scope>
+
         </dependency>
     </dependencies>
 
@@ -408,7 +413,7 @@
                     </arguments>
                 </configuration>
             </plugin>
-
+<!--
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -438,7 +443,7 @@
                         <argument>specification/config.json</argument>
                     </arguments>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
 
 

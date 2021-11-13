@@ -1,5 +1,6 @@
 package com.mservicetech.campsite.model;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -7,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AvailableDates  {
 
-    private java.util.List<String> datelist;
+    private java.util.List<LocalDate> datelist;
     private java.time.LocalDate startDate;
     private java.time.LocalDate endDate;
     private String comment;
@@ -16,11 +17,11 @@ public class AvailableDates  {
     }
 
     @JsonProperty("datelist")
-    public java.util.List<String> getDatelist() {
+    public java.util.List<LocalDate> getDatelist() {
         return datelist;
     }
 
-    public void setDatelist(java.util.List<String> datelist) {
+    public void setDatelist(java.util.List<LocalDate> datelist) {
         this.datelist = datelist;
     }
 

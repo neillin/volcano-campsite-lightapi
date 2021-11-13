@@ -14,8 +14,59 @@ Please [click link](doc/requirement.md) for detail of business requirement.
 
 - Light4j
 
+#### Backend repository Design
 
-#### API Endpoints Design
+The volcano-campsite API uses H2 database as backend repository to save user and reservation information. As the API is designed to handle one single campsite, the database structure is simple:
+
+
+| Table   | Comments        |
+| --------|---------------|
+| client  | Client information including client name and client email |
+| reservation  | Reservation detail information. This is the table hold book of records for reservation |
+| reserved  | Reserved date. This table is used to handle concurrent requests  |
+
+
+By default, when the API starts, h2 will start in-memory database testdb and create tables listed above.
+
+```yaml
+datasource.H2DataSource:
+  DriverClassName: org.h2.jdbcx.JdbcDataSource
+  jdbcUrl: jdbc:h2:mem:testdb;INIT=runscript from 'classpath:scripts/schema.sql';
+  username: sa
+  password: sa
+  maximumPoolSize: 2
+  connectionTimeout: 1000
+```
+The data in the database will disappear after API shutdown. In case if we need keep the data, change the url to use file base h2 database:
+
+    url: jdbc:h2:~/testdb
+
+ER-diagram:
+
+![ERD](doc/ER_diagram.png)
+
+H2 console:
+
+There is a startuphook defined to initial H2 DB datasource and enable H2 console
+
+```text
+  - com.networknt.server.StartupHookProvider:
+    - com.mservicetech.campsite.H2DatasourceStartupHook
+```
+
+After the API started, the console will be available on:
+
+http://localhost:8082/ (if the port has been used, change the webPort property on h2 server property file)
+
+![h2-console](doc/h2-console.png)
+
+Login with user: sa   / password: sa
+
+The startuphook also build DB datasource and verify DB connection. The advantage for this feature is that we can know the DB connection status on API startup instead of wait until first request coming.
+
+
+
+##### API Endpoints Design
 
 - Get: /api/campsite           -- List available time for the campsite
 
