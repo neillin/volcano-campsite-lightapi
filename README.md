@@ -108,3 +108,38 @@ curl --location --request GET 'http://localhost:8080/api/campsite?startDate=2021
 --header 'applicationId: 2' \
 --data-raw ''
 ```
+
+From the API root folder, run docker command:
+```yaml
+docker build -t volcano/campsite .
+docker run -p 8080:8080 volcano/campsite
+```
+
+### API  verification
+
+Swagger ui:  http://localhost:8080/specui.html
+
+API health check:   http://localhost:8080/health/com.mservicetech.api.volcano-campsite-api-1.00
+
+API server info: http://localhost:8080/server/info
+
+Postman could be used to send https request to test the API:
+
+![postman](doc/test.png)
+
+
+For detailed test cases, please refer the [test cases](doc/test_cases.md) document.
+
+### Performance
+
+
+Jmeter could be used to verify the API performance.
+
+From jmeter, open the jmeter file: ./jmeter/campsite-get.jmx. The test plan set 10 concurrent threads to access the GET campsite endpoint (http://localhost:8080/api/campsite?startDate=2021-11-10&endDate=2021-11-18).
+
+For performance result detail, please refer to [performance](doc/performance.md) document.
+
+---
+### Appendix
+
+#### Error Codes:
