@@ -1,18 +1,39 @@
-#--------------------------------------------------------------------------------
-# service.yml
-#--------------------------------------------------------------------------------
-service.singletons:
-  - com.networknt.utility.Decryptor:
-      - com.networknt.decrypt.AESDecryptor
-  - com.networknt.balance.LoadBalance:
-      - com.networknt.balance.RoundRobinLoadBalance
-  - com.networknt.cluster.Cluster:
-      - com.networknt.cluster.LightCluster
 
-server.enableHttp: false
-server.enableHttps: true
-server.httpPort: 8080
-server.httpPorts: 8443
-server.enableRegistry: true
+# environment tag that will be registered on consul to support multiple instances per env for testing.
+# https://github.com/networknt/light-doc/blob/master/docs/content/design/env-segregation.md
+# This tag should only be set for testing env, not production. The production certification process will enforce it.
+server.environment: dev
 
-portalRegistry.portalUrl: https://localhost:8438
+# Build number, to be set by teams for auditing purposes. 
+# Allows teams to audit the value and set it according to their release management processes
+server.buildNumber: latest
+
+#--------------------------------------------------------------------------------
+# security.yml
+#--------------------------------------------------------------------------------
+# Enable JWT verification flag.
+# security.enableVerifyJwt: true
+
+#--------------------------------------------------------------------------------
+# datasource.yml
+#--------------------------------------------------------------------------------
+
+datasource.H2DataSource:
+  DriverClassName: org.h2.jdbcx.JdbcDataSource
+  jdbcUrl: jdbc:h2:mem:testdb;INIT=runscript from 'classpath:scripts/schema.sql';
+  username: sa
+  password: sa
+  maximumPoolSize: 2
+  connectionTimeout: 1000
+
+app-config.queryMap:
+  getReservedDates: SELECT reserved_date FROM reserved;
+  insertReservedDates: INSERT INTO reserved(reserved_date ) VALUES(?);
+  deleteReservedDates: DELETE FROM reserved WHERE reserved_date  = ?;
+  verifyReservedDates: SELECT reserved_date  FROM reserved WHERE reserved_date IN (%s);
+  getClientByEmail: SELECT id, full_name, email FROM client WHERE email=?;
+  insertClient: INSERT INTO client(full_name, email ) VALUES(?, ?);
+  insertReservation: INSERT INTO reservation(id, client_Id, arrival_date, departure_date ) VALUES(?, ?, ?, ?);
+  getReservation: SELECT r.id as id, client_id, arrival_date, departure_date, full_name, email FROM reservation r JOIN client c ON c.id = r.client_id WHERE r.id = ? AND status = 'Active';
+  deleteReservation: UPDATE reservation SET status = 'Inactive' WHERE id = ?;
+  updateReservation: UPDATE reservation SET arrival_date= ? , departure_date= ? WHERE id = ?

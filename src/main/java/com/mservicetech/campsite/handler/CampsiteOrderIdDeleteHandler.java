@@ -2,7 +2,6 @@ package com.mservicetech.campsite.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mservicetech.campsite.exception.DataProcessException;
-import com.mservicetech.campsite.model.Error;
 import com.mservicetech.campsite.model.Reservation;
 import com.mservicetech.campsite.service.CampsiteService;
 import com.networknt.config.Config;
@@ -10,6 +9,7 @@ import com.networknt.exception.ApiException;
 import com.networknt.handler.LightHttpHandler;
 import com.networknt.http.HttpStatus;
 import com.networknt.service.SingletonServiceFactory;
+import com.networknt.status.Status;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.HttpString;
 import org.slf4j.Logger;
@@ -42,11 +42,8 @@ public class CampsiteOrderIdDeleteHandler implements LightHttpHandler {
             exchange.getResponseSender().send(e.getMessage());
         } catch (DataProcessException e) {
             logger.error("Error Occurred: " + e.getMessage());
-            Error error = new Error();
-            error.setCode("E30001");
-            error.setMessage("Database process error");
-            exchange.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            exchange.getResponseSender().send(objectMapper.writeValueAsString(error));
+            Status status = new Status("ERR30001");
+            setExchangeStatus(exchange, status);
         }
     }
 }

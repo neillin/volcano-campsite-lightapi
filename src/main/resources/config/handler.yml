@@ -42,7 +42,8 @@ auditStackTrace: ${handler.auditStackTrace:false}
 handlers:
   # Light-framework cross-cutting concerns implemented in the microservice
   - com.networknt.exception.ExceptionHandler@exception
-  - com.networknt.metrics.MetricsHandler@metrics
+  #- com.networknt.metrics.MetricsHandler@metrics
+  - com.networknt.metrics.prometheus.PrometheusHandler@prometheus
   - com.networknt.traceability.TraceabilityHandler@traceability
   - com.networknt.correlation.CorrelationHandler@correlation
   - com.networknt.openapi.OpenApiHandler@specification
@@ -62,7 +63,7 @@ handlers:
   - com.networknt.logging.handler.LoggerPostHandler@postLogger
   - com.networknt.specification.SpecDisplayHandler@spec
   - com.networknt.specification.SpecSwaggerUIHandler@swaggerui
-  # - com.networknt.metrics.prometheus.PrometheusGetHandler@getprometheus
+  - com.networknt.metrics.prometheus.PrometheusGetHandler@getprometheus
   # Business Handlers
   - com.mservicetech.campsite.handler.CampsiteGetHandler
   - com.mservicetech.campsite.handler.CampsitePostHandler
@@ -74,7 +75,8 @@ handlers:
 chains:
   default:
     - exception
-    - metrics
+    #- metrics
+    - prometheus
     - traceability
     - correlation 
     - specification
@@ -129,6 +131,11 @@ paths:
     exec:
       - security
       - getLogger
+
+  - path: '/prometheus'
+    method: 'get'
+    exec:
+      - getprometheus
 
   - path: '/logger'
     method: 'post'

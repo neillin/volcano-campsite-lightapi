@@ -6,35 +6,32 @@ info:
   license:
     name: "MIT"
 servers:
-- url: "http://volcano.swagger.io/api"
+  - url: "http://volcano.swagger.io/api"
 paths:
   /campsite:
-    parameters:
-    - $ref: "#/components/parameters/requestId"
-    - $ref: "#/components/parameters/applicationId"
     get:
       summary: "List all campsites"
       operationId: "listCampsite"
       tags:
-      - "campsites"
+        - "campsites"
       security:
-      - campsite_auth:
-        - "read:campsite"
+        - campsite_auth:
+            - "read:campsite"
       parameters:
-      - name: "startDate"
-        in: "query"
-        description: "start data search critiria"
-        required: false
-        schema:
-          type: "string"
-          format: "date"
-      - name: "endDate"
-        in: "query"
-        description: "end data search critiria"
-        required: false
-        schema:
-          type: "string"
-          format: "date"
+        - name: "startDate"
+          in: "query"
+          description: "start data search critiria"
+          required: false
+          schema:
+            type: "string"
+            format: "date"
+        - name: "endDate"
+          in: "query"
+          description: "end data search critiria"
+          required: false
+          schema:
+            type: "string"
+            format: "date"
       responses:
         "200":
           description: "An paged array of pets"
@@ -61,11 +58,11 @@ paths:
             schema:
               $ref: "#/components/schemas/Reservation"
       tags:
-      - "campsites"
+        - "campsites"
       security:
-      - campsite_auth:
-        - "read:campsite"
-        - "write:campsite"
+        - campsite_auth:
+            - "read:campsite"
+            - "write:campsite"
       responses:
         "200":
           description: "Expected response to a valid request"
@@ -86,14 +83,14 @@ paths:
       summary: "update campsite order"
       operationId: "updateCampsiteOrder"
       tags:
-      - "campsites"
+        - "campsites"
       parameters:
-      - name: "orderId"
-        in: "path"
-        required: true
-        description: "The id of the pet to retrieve"
-        schema:
-          type: "string"
+        - name: "orderId"
+          in: "path"
+          required: true
+          description: "The id of the pet to retrieve"
+          schema:
+            type: "string"
       requestBody:
         description: "Book to add to the store"
         required: true
@@ -102,9 +99,9 @@ paths:
             schema:
               $ref: "#/components/schemas/Reservation"
       security:
-      - campsite_auth:
-        - "read:campsite"
-        - "write:campsite"
+        - campsite_auth:
+            - "read:campsite"
+            - "write:campsite"
       responses:
         "200":
           description: "An paged array of pets"
@@ -129,18 +126,18 @@ paths:
       summary: "delete a campsite oder"
       operationId: "deleteOrder"
       parameters:
-      - name: "orderId"
-        in: "path"
-        required: true
-        description: "The id of the resevation for the campsite"
-        schema:
-          type: "string"
+        - name: "orderId"
+          in: "path"
+          required: true
+          description: "The id of the resevation for the campsite"
+          schema:
+            type: "string"
       tags:
-      - "campsites"
+        - "campsites"
       security:
-      - campsite_auth:
-        - "read:campsite"
-        - "write:campsite"
+        - campsite_auth:
+            - "read:campsite"
+            - "write:campsite"
       responses:
         "200":
           description: "Expected response to a valid request"
@@ -160,17 +157,17 @@ paths:
       summary: "get a campsite oder"
       operationId: "getOrder"
       parameters:
-      - name: "orderId"
-        in: "path"
-        required: true
-        description: "The id of the resevation for the campsite"
-        schema:
-          type: "string"
+        - name: "orderId"
+          in: "path"
+          required: true
+          description: "The id of the resevation for the campsite"
+          schema:
+            type: "string"
       tags:
-      - "campsites"
+        - "campsites"
       security:
-      - campsite_auth:
-        - "read:campsite"
+        - campsite_auth:
+            - "read:campsite"
       responses:
         "200":
           description: "Expected response to a valid request"
@@ -186,6 +183,16 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/Error"
+
+  /prometheus:
+    get:
+      summary: "prometheus admin endpoint"
+      operationId: "prometheus"
+      tags:
+        - "campsites"
+      responses:
+        "200":
+          description: "successful operation"
 components:
   parameters:
     requestId:
@@ -221,8 +228,8 @@ components:
     Client:
       type: "object"
       required:
-      - "email"
-      - "name"
+        - "email"
+        - "name"
       properties:
         id:
           type: "integer"
@@ -235,8 +242,8 @@ components:
     Reservation:
       type: "object"
       required:
-      - "departure"
-      - "arrival"
+        - "departure"
+        - "arrival"
       properties:
         id:
           type: "string"
@@ -271,8 +278,8 @@ components:
     Error:
       type: "object"
       required:
-      - "code"
-      - "message"
+        - "code"
+        - "message"
       properties:
         code:
           type: "string"

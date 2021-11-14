@@ -9,6 +9,7 @@ import com.networknt.exception.ApiException;
 import com.networknt.handler.LightHttpHandler;
 import com.networknt.http.HttpStatus;
 import com.networknt.service.SingletonServiceFactory;
+import com.networknt.status.Status;
 import io.undertow.server.HttpServerExchange;
 import com.mservicetech.campsite.model.Reservation;
 import io.undertow.util.HttpString;
@@ -41,12 +42,8 @@ public class CampsiteOrderIdPutHandler implements LightHttpHandler {
             setExchangeStatus(exchange, e.getStatus());
             exchange.getResponseSender().send(e.getMessage());
         } catch (Exception e) {
-            logger.error("Error Occurred: " + e.getMessage());
-            Error error = new Error();
-            error.setCode("E30001");
-            error.setMessage("Database process error");
-            exchange.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            exchange.getResponseSender().send(objectMapper.writeValueAsString(error));
+            Status status = new Status("ERR30001");
+            setExchangeStatus(exchange, status);
         }
     }
 }

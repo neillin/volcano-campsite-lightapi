@@ -222,9 +222,8 @@ public class CampsiteRepositoryJdbcImpl implements CampsiteRepository{
             connection.setAutoCommit(false);
             List<LocalDate> dateList = new ArrayList<>();
             long days = Duration.between(oldReservation.getArrival().atStartOfDay(), oldReservation.getDeparture().atStartOfDay() ).toDays();
-            LongStream.range(0, days).forEach(l-> dateList.add(reservation.getArrival().plusDays(l)));
+            LongStream.range(0, days).forEach(l-> dateList.add(oldReservation.getArrival().plusDays(l)));
             deleteDates(connection, dateList);
-
             dateList.clear();
             days = Duration.between(reservation.getArrival().atStartOfDay(), reservation.getDeparture().atStartOfDay() ).toDays();
             LongStream.range(0, days).forEach(l-> dateList.add(reservation.getArrival().plusDays(l)));
