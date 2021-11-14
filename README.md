@@ -135,11 +135,50 @@ For detailed test cases, please refer the [test cases](doc/test_cases.md) docume
 
 Jmeter could be used to verify the API performance.
 
-From jmeter, open the jmeter file: ./jmeter/campsite-get.jmx. The test plan set 10 concurrent threads to access the GET campsite endpoint (http://localhost:8080/api/campsite?startDate=2021-11-10&endDate=2021-11-18).
+From jmeter, open the jmeter file: ./jmeter/campsite-get.jmx. The test plan set 10 concurrent threads to access the GET campsite endpoint (http://localhost:8080/api/campsite).
 
-For performance result detail, please refer to [performance](doc/performance.md) document.
+For performance result detail, please refer to performance detail document:
+
+#### [performance](doc/performance.md)
+
 
 ---
 ### Appendix
 
 #### Error Codes:
+
+ERR30000:
+statusCode: 400
+code: ERR30000
+message: FIRST_ERROR_IN_APP
+description: This is is the first error in this example application.
+
+ERR30001:
+statusCode: 500
+code: ERR30001
+message: Database process error
+description: The DB process has error.
+
+ERR30002:
+statusCode: 422
+code: ERR30002
+message: Data cannot find error
+description: Cannot find data by the request.
+
+ERR30003:
+statusCode: 422
+code: ERR30003
+message: campsite is not available
+description: Error on the reservation, campsite is noy available for the input period. Follow dates have been booked.
+
+ERR30004:
+statusCode: 400
+code: ERR30004
+message: Cannot get resevation by Id
+description: Error on getting reservation, Cannot get resevation by Id.
+
+ERR30005:
+statusCode: 400
+code: ERR30005
+message: Cannot update resevation
+description: Error on updating reservation, Cannot update resevation.
