@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+
 public class Heap1 {
 
     static class ArrayContainer implements Comparable<ArrayContainer> {
@@ -22,6 +23,8 @@ public class Heap1 {
     }
 
     public ListNode mergeKListNode(ListNode[] lists) {
+
+
         PriorityQueue<ListNode> queue = new PriorityQueue<>(new Comparator<ListNode>() {
             @Override
             public int compare(ListNode o1, ListNode o2) {

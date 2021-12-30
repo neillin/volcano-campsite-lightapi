@@ -34,13 +34,14 @@ public class Heap2 {
     public int availableRoom(int[][] intervals) {
         Arrays.sort(intervals, Comparator.comparing((int[] i)->i[0]));
         PriorityQueue<Integer> heap = new PriorityQueue<>();
+     //   PriorityQueue<String> heap1 = new PriorityQueue<>(Comparator.comparing(String::length));
         int count = 0;
         for (int[] itv : intervals) {
              if (heap.isEmpty()) {
                  count++;
-                 heap.add(itv[0]);
+                 heap.add(itv[1]);
              } else {
-                 if (itv[0] > heap.peek()) {
+                 if (itv[0] >= heap.peek()) {
                      heap.poll();
                      heap.add(itv[1]);
                  } else {

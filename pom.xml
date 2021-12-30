@@ -10,7 +10,7 @@
     <properties>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <version.light-4j>2.0.33-SNAPSHOT</version.light-4j>
+        <version.light-4j>2.0.33</version.light-4j>
         <version.jackson>2.12.1</version.jackson>
         <version.slf4j>1.7.25</version.slf4j>
         <version.undertow>2.2.4.Final</version.undertow>
@@ -502,14 +502,7 @@
         </pluginManagement>
 
     </build>
-
-    <distributionManagement>
-        <repository>
-            <id>deployment</id>
-            <name>cbscclrv0103d.ca.cibcwm.com-releases</name>
-            <url>http://cbscclrv0103d.ca.cibcwm.com:8081/artifactory/DGP-API</url>
-        </repository>
-    </distributionManagement>
+    
 
 
 </project>
