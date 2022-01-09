@@ -14,6 +14,12 @@ Please [click link](doc/requirement.md) for detail of business requirement.
 
 - Light4j
 
+###Git Branches (only different between branches is the database access implementation)
+
+- main                     main branch build with pure java JDBC to access database and use JDBC transaction control
+- mybatis                  mybatis branch build with mybatis framework for database process and use mybatis for transaction control
+- jpa (//TODO)             jpa branch build with JPA framework (Atomikos) for database process.
+
 #### Backend repository Design
 
 The volcano-campsite API uses H2 database as backend repository to save user and reservation information. As the API is designed to handle one single campsite, the database structure is simple:
