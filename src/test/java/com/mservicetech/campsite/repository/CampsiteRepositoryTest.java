@@ -4,10 +4,13 @@ import com.mservicetech.campsite.H2DatasourceStartupHook;
 import com.mservicetech.campsite.model.Client;
 import com.mservicetech.campsite.model.Reservation;
 import com.networknt.service.SingletonServiceFactory;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -26,10 +29,12 @@ public class CampsiteRepositoryTest {
     private static  Client client;
     private static Reservation reservation;
     private static H2DatasourceStartupHook h2DatasourceStartupHook;
-    private static Connection connection;
+
+    private static SqlSessionFactory sqlSessionFactory;
+
 
     @BeforeAll
-    public static void setUp() throws SQLException {
+    public static void setUp() throws SQLException, IOException {
         client = new Client();
         client.setEmail("volcano.admin@gmail.com");
         reservation = new Reservation();
@@ -37,8 +42,9 @@ public class CampsiteRepositoryTest {
         reservation.setDeparture(LocalDate.now().plusDays(3));
         h2DatasourceStartupHook= new H2DatasourceStartupHook();
         h2DatasourceStartupHook.onStartup();
-        connection =H2DatasourceStartupHook.dataSource.getConnection();
 
+        ApiSqlSessionFactoryBuilder apiSqlSessionFactoryBuilder = new ApiSqlSessionFactoryBuilder();
+        sqlSessionFactory = apiSqlSessionFactoryBuilder.create();
     }
 
     @Test
@@ -47,6 +53,7 @@ public class CampsiteRepositoryTest {
         assertTrue(reservedList.size()>0);
     }
 
+
     @Test
     public void testVerifyDates() throws SQLException {
         List<LocalDate> dateList = new ArrayList<>();
@@ -54,14 +61,23 @@ public class CampsiteRepositoryTest {
         dateList.add(LocalDate.now().plusDays(1));
         dateList.add(LocalDate.now().plusDays(2));
         dateList.add(LocalDate.now().plusDays(3));
-        List<LocalDate> result =  campsiteRepository.verifyDates(connection, dateList);
+        SqlSession session = sqlSessionFactory.openSession();
+        campsiteRepository.deleteDates(session, dateList);
+        session.commit();
+        List<LocalDate> result =  campsiteRepository.verifyDates(session, dateList);
         assertEquals(result.size(), 0);
     }
 
     @Test
     public void testCheckUserExisting() throws SQLException{
-        Client existing =  campsiteRepository.checkClientExisting(connection, client);
+        Client existing =  campsiteRepository.checkClientExisting(sqlSessionFactory.openSession(), client);
         assertNotNull(existing);
+    }
+
+    @Test
+    public void testGetReservation() throws SQLException{
+        Reservation existing =  campsiteRepository.getReservation("test1-1");
+    //    assertNotNull(existing);
     }
 
     @Test
@@ -69,7 +85,7 @@ public class CampsiteRepositoryTest {
         Client client = new Client();
         client.setName("Test Test");
         client.setEmail("Test.Test@volcano.com");
-        long newClient =  campsiteRepository.insertClient(connection, client);
+        long newClient =  campsiteRepository.insertClient(sqlSessionFactory.openSession(), client);
         assertNotNull(newClient);
     }
 
@@ -78,11 +94,14 @@ public class CampsiteRepositoryTest {
         List<LocalDate> dateList = new ArrayList<>();
         dateList.add(LocalDate.now());
         dateList.add(LocalDate.now().plusDays(1));
-        campsiteRepository.deleteDates(connection, dateList);
-        int records =  campsiteRepository.reserveDates(connection, dateList);
+        SqlSession session = sqlSessionFactory.openSession();
+        campsiteRepository.deleteDates(session, dateList);
+        session.commit();
+        int records =  campsiteRepository.reserveDates(session, dateList);
+        session.commit();
         assertEquals(records, 2);
-        records =  campsiteRepository.deleteDates(connection, dateList);
-        assertEquals(records, 2);
+     //   records =  campsiteRepository.deleteDates(connection, dateList);
+     //   assertEquals(records, 2);
     }
 
     @Test

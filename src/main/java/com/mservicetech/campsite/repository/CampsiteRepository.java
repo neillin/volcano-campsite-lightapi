@@ -3,6 +3,7 @@ import com.mservicetech.campsite.ApplicationConfig;
 import com.mservicetech.campsite.model.Client;
 import com.mservicetech.campsite.model.Reservation;
 import com.networknt.config.Config;
+import org.apache.ibatis.session.SqlSession;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -18,23 +19,18 @@ import java.util.List;
  */
 public interface CampsiteRepository {
 
-    ApplicationConfig appConfig = (ApplicationConfig) Config.getInstance().getJsonObjectConfig(ApplicationConfig.CONFIG_NAME, ApplicationConfig.class);
-    default String getQueryString (String queryName) {
-        return appConfig.getQueryMap().get(queryName);
-    }
-
     List<LocalDate> findReserved() throws SQLException;
 
 
-    int reserveDates(Connection connection, List<LocalDate> dateList) throws  SQLException;
+    int reserveDates(SqlSession session, List<LocalDate> dateList) throws  SQLException;
 
-    int deleteDates(Connection connection, List<LocalDate> dateList) throws  SQLException;
+    int deleteDates(SqlSession session, List<LocalDate> dateList) throws  SQLException;
 
-    List<LocalDate> verifyDates(Connection connection, List<LocalDate> dateList);
+    List<LocalDate> verifyDates(SqlSession session, List<LocalDate> dateList);
 
-    Client checkClientExisting(Connection connection, Client client)  throws SQLException;
+    Client checkClientExisting(SqlSession session, Client client)  throws SQLException;
 
-    long insertClient(Connection connection,  Client client) throws SQLException;
+    long insertClient  (SqlSession session, Client client) throws SQLException;
 
     String createReservation(Reservation reservation) ;
 

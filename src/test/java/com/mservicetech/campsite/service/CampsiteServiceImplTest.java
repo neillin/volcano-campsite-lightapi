@@ -8,13 +8,14 @@ import com.mservicetech.campsite.repository.CampsiteRepository;
 import com.networknt.exception.ApiException;
 import com.networknt.service.SingletonServiceFactory;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
+@Disabled
 public class CampsiteServiceImplTest {
 
     private static CampsiteService campsiteService = SingletonServiceFactory.getBean(CampsiteService.class);
