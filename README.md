@@ -16,9 +16,14 @@ Please [click link](doc/requirement.md) for detail of business requirement.
 
 ###Git Branches (only different between branches is the database access implementation)
 
-- main                     main branch build with pure java JDBC to access database and use JDBC transaction control
-- mybatis                  mybatis branch build with mybatis framework for database process and use mybatis for transaction control
-- jpa (//TODO)             jpa branch build with JPA framework (Atomikos) for database process.
+- main                     
+     main branch build with pure java JDBC to access database and use JDBC transaction control
+
+- mybatis                  
+    mybatis branch build with mybatis framework for database process and use mybatis for transaction control
+
+- jpa (//TODO)
+    jpa branch build with JPA framework (OpenJPA) for database process.
 
 #### Backend repository Design
 
