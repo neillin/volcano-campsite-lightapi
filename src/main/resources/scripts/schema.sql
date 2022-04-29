@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS client
 (
    id bigint(20) NOT NULL AUTO_INCREMENT,

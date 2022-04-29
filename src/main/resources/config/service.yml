@@ -8,7 +8,8 @@ singletons:
       - com.networknt.db.H2DataSource:
           - java.lang.String: H2DataSource
   - com.mservicetech.campsite.repository.CampsiteRepository:
-      - com.mservicetech.campsite.repository.CampsiteRepositoryJdbcImpl
+    #   - com.mservicetech.campsite.repository.CampsiteRepositoryJdbcImpl
+      - com.mservicetech.campsite.repository.CampsiteRepositoryMyBatisImpl
   - com.mservicetech.campsite.service.CampsiteService:
       - com.mservicetech.campsite.service.CampsiteServiceImpl
 

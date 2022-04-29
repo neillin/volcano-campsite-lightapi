@@ -5,8 +5,10 @@ import com.mservicetech.campsite.model.Client;
 import com.mservicetech.campsite.model.Reservation;
 import com.networknt.service.SingletonServiceFactory;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,7 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-
+@TestMethodOrder(OrderAnnotation.class)
 public class CampsiteRepositoryTest {
 
 
@@ -38,54 +40,70 @@ public class CampsiteRepositoryTest {
         h2DatasourceStartupHook= new H2DatasourceStartupHook();
         h2DatasourceStartupHook.onStartup();
         connection =H2DatasourceStartupHook.dataSource.getConnection();
+        cleanupDB();
+    }
 
+    private static void cleanupDB() throws SQLException {
+        Connection conn = H2DatasourceStartupHook.dataSource.getConnection();
+        conn.createStatement().execute("DELETE FROM reserved");
+        conn.createStatement().execute("DELETE FROM reservation");
+        conn.createStatement().execute("DELETE FROM client");
+        conn.createStatement().execute("INSERT INTO reserved(reserved_date ) VALUES('2025-11-05')");
+        conn.createStatement().execute("INSERT INTO client(full_name, email ) VALUES('Admin', 'volcano.admin@gmail.com')");
+        conn.close();
     }
 
     @Test
+    @Order(1)
     public void testFindReserved() throws SQLException {
         List<LocalDate> reservedList =  campsiteRepository.findReserved();
         assertTrue(reservedList.size()>0);
     }
 
     @Test
+    @Order(2)
     public void testVerifyDates() throws SQLException {
         List<LocalDate> dateList = new ArrayList<>();
         dateList.add(LocalDate.now());
         dateList.add(LocalDate.now().plusDays(1));
         dateList.add(LocalDate.now().plusDays(2));
         dateList.add(LocalDate.now().plusDays(3));
-        List<LocalDate> result =  campsiteRepository.verifyDates(connection, dateList);
-        assertEquals(result.size(), 0);
+        List<LocalDate> result =  campsiteRepository.verifyDates(dateList);
+        assertEquals(0, result.size());
     }
 
     @Test
+    @Order(3)
     public void testCheckUserExisting() throws SQLException{
-        Client existing =  campsiteRepository.checkClientExisting(connection, client);
+        Client existing =  campsiteRepository.checkClientExisting(client);
         assertNotNull(existing);
     }
 
     @Test
+    @Order(4)
     public void testInsertClient() throws SQLException{
         Client client = new Client();
         client.setName("Test Test");
         client.setEmail("Test.Test@volcano.com");
-        long newClient =  campsiteRepository.insertClient(connection, client);
+        long newClient =  campsiteRepository.insertClient(client);
         assertNotNull(newClient);
     }
 
     @Test
+    @Order(6)
     public void testReservedDates() throws SQLException{
         List<LocalDate> dateList = new ArrayList<>();
         dateList.add(LocalDate.now());
         dateList.add(LocalDate.now().plusDays(1));
-        campsiteRepository.deleteDates(connection, dateList);
-        int records =  campsiteRepository.reserveDates(connection, dateList);
+        campsiteRepository.deleteDates(dateList);
+        int records =  campsiteRepository.reserveDates(dateList);
         assertEquals(records, 2);
-        records =  campsiteRepository.deleteDates(connection, dateList);
+        records =  campsiteRepository.deleteDates(dateList);
         assertEquals(records, 2);
     }
 
     @Test
+    @Order(7)
     public void testCreateReservation() {
         Client client = new Client();
         client.setName("Test Test");

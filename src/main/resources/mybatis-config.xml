@@ -18,8 +18,9 @@
         <environment id="development">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="driver" value="org.h2.jdbcx.JdbcDataSource"/>
-                <property name="url" value="jdbc:h2:mem:testdb;INIT=runscript from 'classpath:scripts/schema.sql"/>
+                <!-- <property name="driver" value="org.h2.jdbcx.JdbcDataSource"/> -->
+                <property name="driver" value="org.h2.Driver" />
+                <property name="url" value="jdbc:h2:mem:testdb;INIT=runscript from 'classpath:scripts/schema.sql'"/>
                 <property name="username" value="sa"/>
                 <property name="password" value="sa"/>
             </dataSource>
@@ -27,6 +28,7 @@
     </environments>
 
     <mappers>
-        <mapper resource="mapper/BlogMapper.xml"/>
+        <!-- <mapper resource="mapper/BlogMapper.xml"/> -->
+        <package name="com.mservicetech.campsite.repository.mapper"/>
     </mappers>
 </configuration>

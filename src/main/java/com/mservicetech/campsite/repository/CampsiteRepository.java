@@ -26,17 +26,17 @@ public interface CampsiteRepository {
     List<LocalDate> findReserved() throws SQLException;
 
 
-    int reserveDates(Connection connection, List<LocalDate> dateList) throws  SQLException;
+    int reserveDates(List<LocalDate> dateList) throws  SQLException;
 
-    int deleteDates(Connection connection, List<LocalDate> dateList) throws  SQLException;
+    int deleteDates(List<LocalDate> dateList) throws  SQLException;
 
-    List<LocalDate> verifyDates(Connection connection, List<LocalDate> dateList);
+    List<LocalDate> verifyDates(List<LocalDate> dateList);
 
-    Client checkClientExisting(Connection connection, Client client)  throws SQLException;
+    Client checkClientExisting(Client client)  throws SQLException;
 
-    long insertClient(Connection connection,  Client client) throws SQLException;
+    long insertClient(Client client) throws SQLException;
 
-    String createReservation(Reservation reservation) ;
+    String createReservation(Reservation reservation);
 
     Reservation getReservation(String reservationId) throws  SQLException;
 
